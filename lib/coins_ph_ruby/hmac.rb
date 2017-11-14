@@ -10,7 +10,6 @@ module Hmac
     if body.nil?
       message = "#{nonce}#{url}"
     else
-      body = body.to_json
       message = "#{nonce}#{url}#{body}"
     end
 
