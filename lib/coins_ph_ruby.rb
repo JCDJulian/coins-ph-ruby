@@ -8,26 +8,26 @@ module CoinsPhRuby
   class CoinsPhService
 
     def initialize(api_key, api_secret)
-      @API_KEY = api_key
-      @API_SECRET = api_secret
-      @BASE_URL = 'https://coins.ph/api/v3'
-      @conn = Faraday.new @BASE_URL do |connector|
+      @api_key = api_key
+      @api_secret = api_secret
+      @base_url = 'https://coins.ph/api/v3'
+      @conn = Faraday.new @base_url do |connector|
         connector.use FaradayMiddleware::FollowRedirects
         connector.adapter Faraday.default_adapter
       end
     end
 
     def get_crypto_accounts(currency=nil)
-      url = BASE_URL + "/crypto-accounts/"
+      url = @base_url + "/crypto-accounts/"
       nonce = Hmac.get_nonce.to_s
-      signature = Hmac.sign_request(@API_SECRET, url, nonce)
+      signature = Hmac.sign_request(@api_secret, url, nonce)
 
       response = @conn.get do |req|
         req.url 'crypto-accounts'
         req.headers['Content-Type'] = 'application/json'
         req.headers['Accept'] = 'application/json'
         req.headers['ACCESS_SIGNATURE'] = signature
-        req.headers['ACCESS_KEY'] = @API_KEY
+        req.headers['ACCESS_KEY'] = @api_key
         req.headers['ACCESS_NONCE'] = nonce
       end
 
@@ -37,14 +37,14 @@ module CoinsPhRuby
 
     def get_transfers(id=nil)
       nonce = Hmac.get_nonce.to_s
-      url = BASE_URL + "/transfers"
+      url = @base_url + "/transfers"
 
       response = @conn.get do |req|
         req.url 'transfers'
         req.headers['Content-Type'] = 'application/json'
         req.headers['Accept'] = 'application/json'
-        req.headers['ACCESS_SIGNATURE'] = Hmac.sign_request(@API_SECRET, url, nonce)
-        req.headers['ACCESS_KEY'] = @API_KEY
+        req.headers['ACCESS_SIGNATURE'] = Hmac.sign_request(@api_secret, url, nonce)
+        req.headers['ACCESS_KEY'] = @api_key
         req.headers['ACCESS_NONCE'] = nonce
       end
 
@@ -61,15 +61,15 @@ module CoinsPhRuby
       }"
 
       nonce = Hmac.get_nonce.to_s
-      url = BASE_URL + "/transfers"
+      url = @base_url + "/transfers"
 
       response = @conn.post do |req|
         req.url 'transfers'
         req.headers['Content-Type'] = 'application/json'
         req.headers['Accept'] = 'application/json'
 
-        req.headers['ACCESS_SIGNATURE'] = Hmac.sign_request(@API_SECRET, url, nonce, body)
-        req.headers['ACCESS_KEY'] = @API_KEY
+        req.headers['ACCESS_SIGNATURE'] = Hmac.sign_request(@api_secret, url, nonce, body)
+        req.headers['ACCESS_KEY'] = @api_key
         req.headers['ACCESS_NONCE'] = nonce
 
         req.body = body
