@@ -17,7 +17,7 @@ module CoinsPhRuby
       end
     end
 
-    def self.get_crypto_accounts(currency=nil)
+    def get_crypto_accounts(currency=nil)
       url = BASE_URL + "/crypto-accounts/"
       nonce = Hmac.get_nonce.to_s
       signature = Hmac.sign_request(@API_SECRET, url, nonce)
@@ -35,7 +35,7 @@ module CoinsPhRuby
       return response
     end
 
-    def self.get_transfers(id=nil)
+    def get_transfers(id=nil)
       nonce = Hmac.get_nonce.to_s
       url = BASE_URL + "/transfers"
 
@@ -52,7 +52,7 @@ module CoinsPhRuby
       return response
     end
 
-    def self.transfer (amount, account, target_address, message)
+    def transfer (amount, account, target_address, message)
       body = "{
         'amount': #{amount},
         'account': #{account},

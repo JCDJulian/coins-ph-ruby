@@ -8,6 +8,7 @@
 /spec/reports/
 /tmp/
 .idea/
+coins_ph_ruby-0.1.0.gem
 
 # rspec failure tracking
 .rspec_status
